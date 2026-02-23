@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>RAG Architecture - Duffy Property Group</title>
+<style>
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f8f9fa;
+  padding: 40px;
+  margin: 0;
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+h1 {
+  color: #1B4F72;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 32px;
+}
+.subtitle {
+  text-align: center;
+  color: #7F8C8D;
+  margin-bottom: 40px;
+  font-size: 18px;
+}
+.diagram {
+  position: relative;
+  margin: 40px 0;
+}
+.layer {
+  background: linear-gradient(135deg, #ECF0F1 0%, #D5DBDB 100%);
+  border: 2px solid #BDC3C7;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  position: relative;
+}
+.layer-title {
+  font-weight: bold;
+  color: #1B4F72;
+  font-size: 18px;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #3498DB;
+  display: inline-block;
+}
+.boxes {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+.box {
+  background: white;
+  border: 2px solid #3498DB;
+  border-radius: 6px;
+  padding: 15px 20px;
+  flex: 1;
+  min-width: 180px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: all 0.3s;
+}
+.box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+.box-title {
+  font-weight: bold;
+  color: #2C3E50;
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+.box-desc {
+  color: #7F8C8D;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.arrow {
+  text-align: center;
+  font-size: 32px;
+  color: #D35400;
+  margin: 15px 0;
+  font-weight: bold;
+}
+.user-box {
+  background: linear-gradient(135deg, #27AE60 0%, #229954 100%);
+  color: white;
+  border: none;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  margin: 20px auto;
+  max-width: 600px;
+  box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
+}
+.user-box-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.user-box-desc {
+  font-size: 15px;
+  opacity: 0.95;
+}
+.highlight {
+  background: linear-gradient(135deg, #3498DB 0%, #2980B9 100%);
+  color: white;
+  border: none;
+}
+.highlight .box-title {
+  color: white;
+}
+.highlight .box-desc {
+  color: rgba(255,255,255,0.9);
+}
+.note {
+  background: #FFF8E1;
+  border-left: 4px solid #F39C12;
+  padding: 15px 20px;
+  margin: 30px 0;
+  border-radius: 4px;
+}
+.note-title {
+  font-weight: bold;
+  color: #D68910;
+  margin-bottom: 8px;
+}
+.note-text {
+  color: #7D6608;
+  line-height: 1.6;
+  font-size: 14px;
+}
+.flow-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 30px 0;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.flow-box {
+  background: white;
+  border: 3px solid #3498DB;
+  border-radius: 10px;
+  padding: 20px;
+  width: 200px;
+  text-align: center;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+.flow-box.start {
+  border-color: #27AE60;
+  background: linear-gradient(135deg, #E8F8F5 0%, #D5F5E3 100%);
+}
+.flow-box.end {
+  border-color: #E67E22;
+  background: linear-gradient(135deg, #FEF5E7 0%, #FAE5D3 100%);
+}
+.flow-arrow {
+  font-size: 40px;
+  color: #D35400;
+  font-weight: bold;
+}
+.tech-stack {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+.tech-item {
+  background: #F8F9FA;
+  border: 1px solid #DEE2E6;
+  border-radius: 6px;
+  padding: 12px;
+  text-align: center;
+  font-size: 13px;
+  color: #495057;
+  font-weight: 500;
+}
+@media print {
+  body { background: white; padding: 20px; }
+  .container { box-shadow: none; }
+  .box:hover { transform: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>AI Knowledge System Architecture</h1>
+  <div class="subtitle">For Duffy Property Group — Non-Technical Overview</div>
+
+  <!-- SIMPLE FLOW DIAGRAM -->
+  <h2 style="color: #1B4F72; margin-top: 40px;">How It Works — Simple Flow</h2>
+  
+  <div class="flow-container">
+    <div class="flow-box start">
+      <div style="font-size: 40px; margin-bottom: 10px;">📁</div>
+      <div style="font-weight: bold; color: #27AE60; margin-bottom: 8px;">Your Documents</div>
+      <div style="font-size: 12px; color: #555;">SharePoint, Drives, Email</div>
+    </div>
+    
+    <div class="flow-arrow">→</div>
+    
+    <div class="flow-box">
+      <div style="font-size: 40px; margin-bottom: 10px;">🔍</div>
+      <div style="font-weight: bold; color: #3498DB; margin-bottom: 8px;">AI Indexing</div>
+      <div style="font-size: 12px; color: #555;">Overnight processing</div>
+    </div>
+    
+    <div class="flow-arrow">→</div>
+    
+    <div class="flow-box">
+      <div style="font-size: 40px; margin-bottom: 10px;">💬</div>
+      <div style="font-weight: bold; color: #3498DB; margin-bottom: 8px;">Question Asked</div>
+      <div style="font-size: 12px; color: #555;">Mobile or desktop</div>
+    </div>
+    
+    <div class="flow-arrow">→</div>
+    
+    <div class="flow-box">
+      <div style="font-size: 40px; margin-bottom: 10px;">⚡</div>
+      <div style="font-weight: bold; color: #3498DB; margin-bottom: 8px;">AI Searches</div>
+      <div style="font-size: 12px; color: #555;">All docs, 3 seconds</div>
+    </div>
+    
+    <div class="flow-arrow">→</div>
+    
+    <div class="flow-box end">
+      <div style="font-size: 40px; margin-bottom: 10px;">✅</div>
+      <div style="font-weight: bold; color: #E67E22; margin-bottom: 8px;">Answer + Source</div>
+      <div style="font-size: 12px; color: #555;">With page & doc link</div>
+    </div>
+  </div>
+
+  <div class="note">
+    <div class="note-title">⏱️ Timeline</div>
+    <div class="note-text">
+      <strong>First time setup:</strong> 2-3 days to index all project documents (happens once).<br>
+      <strong>Daily use:</strong> Answers in under 3 seconds. No waiting. No searching through folders.
+    </div>
+  </div>
+
+  <!-- DETAILED ARCHITECTURE -->
+  <h2 style="color: #1B4F72; margin-top: 50px;">Technical Architecture — What Happens Behind the Scenes</h2>
+
+  <!-- Layer 1: Data Sources -->
+  <div class="layer">
+    <div class="layer-title">1. Your Existing Systems (No Changes Required)</div>
+    <div class="boxes">
+      <div class="box">
+        <div class="box-title">SharePoint</div>
+        <div class="box-desc">Project folders, drawings, specs, schedules</div>
+      </div>
+      <div class="box">
+        <div class="box-title">Project Drives</div>
+        <div class="box-desc">Dropbox, OneDrive, network drives</div>
+      </div>
+      <div class="box">
+        <div class="box-title">Email Archives</div>
+        <div class="box-desc">Outlook folders with project correspondence</div>
+      </div>
+      <div class="box">
+        <div class="box-title">Other Systems</div>
+        <div class="box-desc">Contractor portals, planning docs</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- Layer 2: AI Processing -->
+  <div class="layer">
+    <div class="layer-title">2. AI Document Processing (Runs Overnight)</div>
+    <div class="boxes">
+      <div class="box highlight">
+        <div class="box-title">Document Reader</div>
+        <div class="box-desc">Reads PDFs, Word docs, Excel, emails, drawings</div>
+      </div>
+      <div class="box highlight">
+        <div class="box-title">Smart Chunking</div>
+        <div class="box-desc">Splits docs intelligently (keeps tables together, tracks versions)</div>
+      </div>
+      <div class="box highlight">
+        <div class="box-title">Indexing</div>
+        <div class="box-desc">Creates searchable database organized by project</div>
+      </div>
+      <div class="box highlight">
+        <div class="box-title">Learning</div>
+        <div class="box-desc">Learns construction terms: MEP, DAC, BER, snag lists</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- Layer 3: Search & AI -->
+  <div class="layer">
+    <div class="layer-title">3. When Someone Asks a Question</div>
+    <div class="boxes">
+      <div class="box">
+        <div class="box-title">Search Engine</div>
+        <div class="box-desc">Finds relevant sections across all docs in 1-2 seconds</div>
+      </div>
+      <div class="box">
+        <div class="box-title">AI Reader</div>
+        <div class="box-desc">Reads found sections, understands context</div>
+      </div>
+      <div class="box">
+        <div class="box-title">Answer Generator</div>
+        <div class="box-desc">Writes clear answer in plain English</div>
+      </div>
+      <div class="box">
+        <div class="box-title">Source Tracker</div>
+        <div class="box-desc">Always includes: doc name, page, section, link</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- Layer 4: User Interface -->
+  <div class="user-box">
+    <div class="user-box-title">Your Team Gets the Answer</div>
+    <div class="user-box-desc">
+      Mobile app or web browser • Works on-site or in office • Answer + exact source citation • 3 seconds total
+    </div>
+  </div>
+
+  <!-- Security Note -->
+  <div class="note">
+    <div class="note-title">🔒 Data Security & Privacy</div>
+    <div class="note-text">
+      <strong>Hosted on Microsoft Azure Ireland:</strong> Your data never leaves the EU.<br>
+      <strong>Read-only access:</strong> We never modify or delete your documents.<br>
+      <strong>Encrypted:</strong> All data encrypted in transit and at rest.<br>
+      <strong>Project isolation:</strong> Each project's data is completely separate — no cross-contamination.
+    </div>
+  </div>
+
+  <!-- Tech Stack -->
+  <h2 style="color: #1B4F72; margin-top: 50px;">Technology Stack (For IT/Technical Teams)</h2>
+  
+  <div class="tech-stack">
+    <div class="tech-item">Microsoft Azure Cloud</div>
+    <div class="tech-item">Azure AI Search</div>
+    <div class="tech-item">OpenAI GPT-4</div>
+    <div class="tech-item">Vector Database</div>
+    <div class="tech-item">Python Backend</div>
+    <div class="tech-item">React Frontend</div>
+    <div class="tech-item">SharePoint API</div>
+    <div class="tech-item">OAuth2 Security</div>
+  </div>
+
+  <div class="note" style="margin-top: 40px;">
+    <div class="note-title">💡 Key Advantages of This Architecture</div>
+    <div class="note-text">
+      <strong>No disruption:</strong> Uses your existing systems. No migration. No data transfer.<br>
+      <strong>Fast:</strong> All processing happens overnight. Questions answered in real-time.<br>
+      <strong>Scalable:</strong> Works with 100 documents or 100,000 documents.<br>
+      <strong>Secure:</strong> EU-hosted, encrypted, read-only access, project isolation.<br>
+      <strong>Mobile-ready:</strong> Site managers can use it on-site without returning to office.
+    </div>
+  </div>
+
+  <!-- Example Use Case -->
+  <h2 style="color: #1B4F72; margin-top: 50px;">Real Example — From Question to Answer</h2>
+  
+  <div style="background: #F8F9FA; padding: 25px; border-radius: 8px; border-left: 5px solid #27AE60;">
+    <p style="margin: 0 0 15px 0; color: #555; font-size: 15px;"><strong style="color: #27AE60;">Site Manager at Lisieux Park asks:</strong></p>
+    <p style="margin: 0 0 20px 0; font-size: 18px; color: #2C3E50;">"What's the approved fire door specification for Block A?"</p>
+    
+    <p style="margin: 0 0 10px 0; color: #888; font-size: 14px;"><em>Behind the scenes (happens in 2-3 seconds):</em></p>
+    <ol style="color: #555; font-size: 14px; line-height: 1.8; padding-left: 20px;">
+      <li>System searches all Lisieux Park documents</li>
+      <li>Finds specification document v4.2, section 8.3</li>
+      <li>Reads the section about fire doors</li>
+      <li>Generates answer with source citation</li>
+    </ol>
+    
+    <p style="margin: 20px 0 5px 0; color: #555; font-size: 15px;"><strong style="color: #E67E22;">System returns:</strong></p>
+    <div style="background: white; padding: 20px; border-radius: 6px; border: 2px solid #27AE60;">
+      <p style="margin: 0 0 10px 0; font-size: 16px; color: #2C3E50;">"Fire doors for Block A: <strong>FD30S standard</strong>, supplier: <strong>Doras Ireland Ltd</strong>."</p>
+      <p style="margin: 0; font-size: 13px; color: #7F8C8D;">📄 Source: <em>Lisieux Park Specification Document v4.2, Section 8.3, Page 47</em> <a href="#" style="color: #3498DB;">[View Document]</a></p>
+    </div>
+    
+    <p style="margin: 20px 0 0 0; color: #27AE60; font-size: 15px; font-weight: bold;">✅ Total time: 3 seconds. Previously: 20-25 minutes of searching.</p>
+  </div>
+
+  <p style="text-align: center; margin-top: 50px; color: #7F8C8D; font-size: 14px;">
+    Questions? Contact: Saikrishna Deshpande, AigenAgentic Solutions • Based in Galway
+  </p>
+</div>
+
+</body>
+</html>
